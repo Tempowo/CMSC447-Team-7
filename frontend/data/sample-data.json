@@ -1,0 +1,480 @@
+{
+  "meta": {
+    "isSample": true,
+    "note": "Invented sample data. Not real student data."
+  },
+  "semesters": [
+    "Fall 2025",
+    "Spring 2026",
+    "Fall 2026"
+  ],
+  "enrollment": {
+    "Fall 2025": 14100,
+    "Spring 2026": 13900,
+    "Fall 2026": 14200
+  },
+  "units": [
+    {
+      "id": "retriever-essentials",
+      "name": "Retriever Essentials"
+    },
+    {
+      "id": "retriever-care",
+      "name": "Retriever Care Center"
+    },
+    {
+      "id": "student-engagement",
+      "name": "Student Engagement"
+    },
+    {
+      "id": "mosaic",
+      "name": "Mosaic"
+    },
+    {
+      "id": "graduate-student-life",
+      "name": "Graduate Student Life"
+    },
+    {
+      "id": "pride-center",
+      "name": "Pride Center"
+    },
+    {
+      "id": "veteran-student-life",
+      "name": "Veteran Student Life"
+    }
+  ],
+  "reach": {
+    "Fall 2025": {
+      "unique": 5258,
+      "one": 3581,
+      "two": 1267,
+      "threePlus": 410
+    },
+    "Spring 2026": {
+      "unique": 5407,
+      "one": 3648,
+      "two": 1371,
+      "threePlus": 388
+    },
+    "Fall 2026": {
+      "unique": 5260,
+      "one": 3500,
+      "two": 1317,
+      "threePlus": 443
+    }
+  },
+  "unitStats": {
+    "Fall 2025": {
+      "retriever-essentials": {
+        "studentsServed": 1667
+      },
+      "retriever-care": {
+        "studentsServed": 1135
+      },
+      "student-engagement": {
+        "studentsServed": 2261
+      },
+      "mosaic": {
+        "studentsServed": 696
+      },
+      "graduate-student-life": {
+        "studentsServed": 621
+      },
+      "pride-center": {
+        "studentsServed": 620
+      },
+      "veteran-student-life": {
+        "studentsServed": 345
+      }
+    },
+    "Spring 2026": {
+      "retriever-essentials": {
+        "studentsServed": 1513
+      },
+      "retriever-care": {
+        "studentsServed": 1149
+      },
+      "student-engagement": {
+        "studentsServed": 2446
+      },
+      "mosaic": {
+        "studentsServed": 663
+      },
+      "graduate-student-life": {
+        "studentsServed": 792
+      },
+      "pride-center": {
+        "studentsServed": 634
+      },
+      "veteran-student-life": {
+        "studentsServed": 356
+      }
+    },
+    "Fall 2026": {
+      "retriever-essentials": {
+        "studentsServed": 1818
+      },
+      "retriever-care": {
+        "studentsServed": 1128
+      },
+      "student-engagement": {
+        "studentsServed": 2289
+      },
+      "mosaic": {
+        "studentsServed": 629
+      },
+      "graduate-student-life": {
+        "studentsServed": 714
+      },
+      "pride-center": {
+        "studentsServed": 572
+      },
+      "veteran-student-life": {
+        "studentsServed": 313
+      }
+    }
+  },
+  "participation": {
+    "Fall 2025": [
+      {
+        "population": "Undergraduate",
+        "enrolled": 10998,
+        "participants": {
+          "retriever-essentials": 1418,
+          "retriever-care": 933,
+          "student-engagement": 1869,
+          "mosaic": 603,
+          "graduate-student-life": 508,
+          "pride-center": 543,
+          "veteran-student-life": 291,
+          "all": 4458
+        }
+      },
+      {
+        "population": "Graduate",
+        "enrolled": 3102,
+        "participants": {
+          "retriever-essentials": 249,
+          "retriever-care": 202,
+          "student-engagement": 392,
+          "mosaic": 93,
+          "graduate-student-life": 113,
+          "pride-center": 77,
+          "veteran-student-life": 54,
+          "all": 800
+        }
+      },
+      {
+        "population": "Transfer",
+        "enrolled": 2397,
+        "participants": {
+          "retriever-essentials": 279,
+          "retriever-care": 150,
+          "student-engagement": 361,
+          "mosaic": 109,
+          "graduate-student-life": 106,
+          "pride-center": 95,
+          "veteran-student-life": 49,
+          "all": 776
+        }
+      },
+      {
+        "population": "First-generation",
+        "enrolled": 3384,
+        "participants": {
+          "retriever-essentials": 575,
+          "retriever-care": 427,
+          "student-engagement": 800,
+          "mosaic": 197,
+          "graduate-student-life": 207,
+          "pride-center": 190,
+          "veteran-student-life": 105,
+          "all": 1670
+        }
+      },
+      {
+        "population": "Veteran",
+        "enrolled": 282,
+        "participants": {
+          "retriever-essentials": 26,
+          "retriever-care": 20,
+          "student-engagement": 34,
+          "mosaic": 13,
+          "graduate-student-life": 13,
+          "pride-center": 12,
+          "veteran-student-life": 7,
+          "all": 97
+        }
+      },
+      {
+        "population": "International",
+        "enrolled": 1128,
+        "participants": {
+          "retriever-essentials": 114,
+          "retriever-care": 97,
+          "student-engagement": 174,
+          "mosaic": 57,
+          "graduate-student-life": 45,
+          "pride-center": 57,
+          "veteran-student-life": 24,
+          "all": 422
+        }
+      }
+    ],
+    "Spring 2026": [
+      {
+        "population": "Undergraduate",
+        "enrolled": 10842,
+        "participants": {
+          "retriever-essentials": 1295,
+          "retriever-care": 989,
+          "student-engagement": 2025,
+          "mosaic": 560,
+          "graduate-student-life": 680,
+          "pride-center": 532,
+          "veteran-student-life": 311,
+          "all": 4596
+        }
+      },
+      {
+        "population": "Graduate",
+        "enrolled": 3058,
+        "participants": {
+          "retriever-essentials": 218,
+          "retriever-care": 160,
+          "student-engagement": 421,
+          "mosaic": 103,
+          "graduate-student-life": 112,
+          "pride-center": 102,
+          "veteran-student-life": 45,
+          "all": 811
+        }
+      },
+      {
+        "population": "Transfer",
+        "enrolled": 2363,
+        "participants": {
+          "retriever-essentials": 348,
+          "retriever-care": 235,
+          "student-engagement": 453,
+          "mosaic": 135,
+          "graduate-student-life": 187,
+          "pride-center": 135,
+          "veteran-student-life": 81,
+          "all": 1193
+        }
+      },
+      {
+        "population": "First-generation",
+        "enrolled": 3336,
+        "participants": {
+          "retriever-essentials": 382,
+          "retriever-care": 289,
+          "student-engagement": 649,
+          "mosaic": 140,
+          "graduate-student-life": 162,
+          "pride-center": 151,
+          "veteran-student-life": 94,
+          "all": 1263
+        }
+      },
+      {
+        "population": "Veteran",
+        "enrolled": 278,
+        "participants": {
+          "retriever-essentials": 40,
+          "retriever-care": 31,
+          "student-engagement": 57,
+          "mosaic": 20,
+          "graduate-student-life": 21,
+          "pride-center": 16,
+          "veteran-student-life": 11,
+          "all": 137
+        }
+      },
+      {
+        "population": "International",
+        "enrolled": 1112,
+        "participants": {
+          "retriever-essentials": 130,
+          "retriever-care": 86,
+          "student-engagement": 252,
+          "mosaic": 58,
+          "graduate-student-life": 83,
+          "pride-center": 54,
+          "veteran-student-life": 29,
+          "all": 489
+        }
+      }
+    ],
+    "Fall 2026": [
+      {
+        "population": "Undergraduate",
+        "enrolled": 11076,
+        "participants": {
+          "retriever-essentials": 1566,
+          "retriever-care": 978,
+          "student-engagement": 1946,
+          "mosaic": 517,
+          "graduate-student-life": 614,
+          "pride-center": 489,
+          "veteran-student-life": 265,
+          "all": 4452
+        }
+      },
+      {
+        "population": "Graduate",
+        "enrolled": 3124,
+        "participants": {
+          "retriever-essentials": 252,
+          "retriever-care": 150,
+          "student-engagement": 343,
+          "mosaic": 112,
+          "graduate-student-life": 100,
+          "pride-center": 83,
+          "veteran-student-life": 48,
+          "all": 808
+        }
+      },
+      {
+        "population": "Transfer",
+        "enrolled": 2414,
+        "participants": {
+          "retriever-essentials": 294,
+          "retriever-care": 211,
+          "student-engagement": 373,
+          "mosaic": 115,
+          "graduate-student-life": 138,
+          "pride-center": 82,
+          "veteran-student-life": 43,
+          "all": 877
+        }
+      },
+      {
+        "population": "First-generation",
+        "enrolled": 3408,
+        "participants": {
+          "retriever-essentials": 459,
+          "retriever-care": 325,
+          "student-engagement": 662,
+          "mosaic": 185,
+          "graduate-student-life": 256,
+          "pride-center": 144,
+          "veteran-student-life": 98,
+          "all": 1585
+        }
+      },
+      {
+        "population": "Veteran",
+        "enrolled": 284,
+        "participants": {
+          "retriever-essentials": 25,
+          "retriever-care": 17,
+          "student-engagement": 41,
+          "mosaic": 11,
+          "graduate-student-life": 12,
+          "pride-center": 8,
+          "veteran-student-life": 5,
+          "all": 84
+        }
+      },
+      {
+        "population": "International",
+        "enrolled": 1136,
+        "participants": {
+          "retriever-essentials": 191,
+          "retriever-care": 138,
+          "student-engagement": 275,
+          "mosaic": 65,
+          "graduate-student-life": 81,
+          "pride-center": 60,
+          "veteran-student-life": 32,
+          "all": 595
+        }
+      }
+    ]
+  },
+  "monthlyEssentials": {
+    "Fall 2025": [
+      {
+        "month": "Aug",
+        "unique": 232,
+        "repeat": 93
+      },
+      {
+        "month": "Sep",
+        "unique": 433,
+        "repeat": 218
+      },
+      {
+        "month": "Oct",
+        "unique": 482,
+        "repeat": 216
+      },
+      {
+        "month": "Nov",
+        "unique": 356,
+        "repeat": 134
+      },
+      {
+        "month": "Dec",
+        "unique": 230,
+        "repeat": 120
+      }
+    ],
+    "Spring 2026": [
+      {
+        "month": "Jan",
+        "unique": 208,
+        "repeat": 74
+      },
+      {
+        "month": "Feb",
+        "unique": 397,
+        "repeat": 185
+      },
+      {
+        "month": "Mar",
+        "unique": 445,
+        "repeat": 177
+      },
+      {
+        "month": "Apr",
+        "unique": 371,
+        "repeat": 152
+      },
+      {
+        "month": "May",
+        "unique": 176,
+        "repeat": 101
+      }
+    ],
+    "Fall 2026": [
+      {
+        "month": "Aug",
+        "unique": 264,
+        "repeat": 96
+      },
+      {
+        "month": "Sep",
+        "unique": 466,
+        "repeat": 183
+      },
+      {
+        "month": "Oct",
+        "unique": 442,
+        "repeat": 226
+      },
+      {
+        "month": "Nov",
+        "unique": 416,
+        "repeat": 249
+      },
+      {
+        "month": "Dec",
+        "unique": 250,
+        "repeat": 124
+      }
+    ]
+  }
+}
