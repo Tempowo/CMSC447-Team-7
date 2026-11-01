@@ -22,6 +22,18 @@
     --focus: #005fcc;
     --positive: #1e7b34;
     --negative: #b3261e;
+    --chart-bar: #fdb515;
+    --chart-line-a: #111111;
+    --chart-line-b: #c98f00;
+    --chart-text: #333333;
+    --chart-grid: #e3e3e3;
+    --chart-series-1: #111111;
+    --chart-series-2: #c98f00;
+    --chart-series-3: #0072b2;
+    --chart-series-4: #009e73;
+    --chart-series-5: #d55e00;
+    --chart-series-6: #cc79a7;
+    --chart-series-7: #7a7a7a;
 }
 
 * {

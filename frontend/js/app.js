@@ -8,6 +8,11 @@ const DATA_URL = "data/sample-data.json";
 const ALL_UNITS_KEY = "all";
 const PERCENT_DECIMALS = 1;
 const NO_CHANGE_TEXT = "-";
+const LINE_TENSION = 0.25;
+const REPEAT_LINE_DASH = [6, 4];
+const SERIES_COLOR_COUNT = 7;
+const POINT_STYLES = ["circle", "rect", "triangle", "rectRot", "star", "cross", "crossRot"];
+const POINT_RADIUS = 5;
 
 // ===== State (everything that can change while the page is open) =====
 
@@ -44,6 +49,13 @@ function cacheElements() {
     // Table body
     elements.unitTableBody = document.getElementById("unit-table-body");
 
+    // Chart canvases
+    elements.participationCanvas = document.getElementById("participation-chart");
+    elements.participationNote = document.getElementById("participation-note");
+    elements.unitTrendCanvas = document.getElementById("unit-trend-chart");
+    elements.shareCanvas = document.getElementById("share-chart");
+    elements.trendCanvas = document.getElementById("trend-chart");
+
 }
 
 // ===== Small helpers =====
@@ -71,6 +83,43 @@ function formatPercent(fraction) {
     const percentText = (fraction * 100).toFixed(PERCENT_DECIMALS) + "%";
 
     return percentText;
+
+}
+
+// Name: roundPercent
+// Desc: Rounds a percent value (already multiplied by 100) for use in a chart.
+// Precondition: value is a number.
+// Postcondition: Returns the rounded number.
+function roundPercent(value) {
+
+    // toFixed gives text, so Number turns it back into a number
+    const rounded = Number(value.toFixed(PERCENT_DECIMALS));
+
+    return rounded;
+
+}
+
+// Name: formatPercentTick
+// Desc: Adds a % sign to a chart axis label.
+// Precondition: value is a number.
+// Postcondition: Returns the label text.
+function formatPercentTick(value) {
+
+    const tickText = value + "%";
+
+    return tickText;
+
+}
+
+// Name: sortByPercentDescending
+// Desc: Comparison function that puts the largest percent first.
+// Precondition: a and b each have a numeric percent property.
+// Postcondition: Returns a negative, zero, or positive number for Array.sort.
+function sortByPercentDescending(a, b) {
+
+    const difference = b.percent - a.percent;
+
+    return difference;
 
 }
 
@@ -188,6 +237,109 @@ async function loadData() {
 
 }
 
+// ===== Theme =====
+
+// Name: getThemeColors
+// Desc: Reads the current theme's chart colors from the CSS variables.
+// Precondition: A theme is set on the <html> element.
+// Postcondition: Returns an object of color strings for the charts to use.
+function getThemeColors() {
+
+    const styles = getComputedStyle(document.documentElement);
+
+    // Reads the numbered line colors (--chart-series-1, --chart-series-2, and so on)
+    const series = [];
+    for (let i = 1; i <= SERIES_COLOR_COUNT; i++) {
+        series.push(styles.getPropertyValue("--chart-series-" + i).trim());
+    }
+
+    const colors = {
+        bar: styles.getPropertyValue("--chart-bar").trim(),
+        lineA: styles.getPropertyValue("--chart-line-a").trim(),
+        lineB: styles.getPropertyValue("--chart-line-b").trim(),
+        text: styles.getPropertyValue("--chart-text").trim(),
+        grid: styles.getPropertyValue("--chart-grid").trim(),
+        series: series
+    };
+
+    return colors;
+
+}
+
+// ===== Chart helpers =====
+
+// Name: drawChart
+// Desc: Draws a Chart.js chart, replacing any earlier chart with the same key.
+// Precondition: Chart.js is loaded; canvas is a <canvas> element.
+// Postcondition: The chart is drawn and stored in state.charts under chartKey.
+function drawChart(chartKey, canvas, config) {
+
+    // Removes the old chart first so charts do not stack up
+    if (state.charts[chartKey]) {
+        state.charts[chartKey].destroy();
+    }
+
+    state.charts[chartKey] = new Chart(canvas, config);
+
+}
+
+// Name: makeBarData
+// Desc: Builds the labels and values a horizontal bar chart needs.
+// Precondition: rows is a list of {label, percent}; colors comes from getThemeColors.
+// Postcondition: Returns a Chart.js data object.
+function makeBarData(rows, colors) {
+
+    const labels = [];
+    const percents = [];
+
+    // Splits the rows into two parallel lists
+    for (let i = 0; i < rows.length; i++) {
+        labels.push(rows[i].label);
+        percents.push(roundPercent(rows[i].percent));
+    }
+
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            data: percents,
+            backgroundColor: colors.bar
+        }]
+    };
+
+    return chartData;
+
+}
+
+// Name: makeBarOptions
+// Desc: Builds shared options for the horizontal percent bar charts.
+// Precondition: colors comes from getThemeColors.
+// Postcondition: Returns a Chart.js options object.
+function makeBarOptions(colors) {
+
+    const options = {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                ticks: { color: colors.text, callback: formatPercentTick },
+                grid: { color: colors.grid }
+            },
+            y: {
+                ticks: { color: colors.text },
+                grid: { display: false }
+            }
+        }
+    };
+
+    return options;
+
+}
+
 // ===== Rendering =====
 
 // Name: renderKpis
@@ -275,14 +427,248 @@ function renderUnitTable() {
 
 }
 
+// Name: renderParticipationChart
+// Desc: Draws the percent of each population participating, for all units or one unit.
+// Precondition: state.data, state.semester, and state.participationUnit are set.
+// Postcondition: The participation bar chart is redrawn.
+function renderParticipationChart() {
+
+    const colors = getThemeColors();
+    const unitKey = state.participationUnit;
+    const populations = state.data.participation[state.semester];
+
+    // Turns each population's participant count into a percent of that population
+    const rows = [];
+    for (let i = 0; i < populations.length; i++) {
+        rows.push({
+            label: populations[i].population,
+            percent: (populations[i].participants[unitKey] / populations[i].enrolled) * 100
+        });
+    }
+
+    // Puts the largest percent first
+    rows.sort(sortByPercentDescending);
+
+    drawChart("participation", elements.participationCanvas, {
+        type: "bar",
+        data: makeBarData(rows, colors),
+        options: makeBarOptions(colors)
+    });
+
+    // Shows the overall rate under the chart so each bar can be compared with it
+    renderParticipationNote();
+
+}
+
+// Name: renderShareChart
+// Desc: Draws each unit's share, as a share of the portfolio or of total enrollment.
+// Precondition: state.data, state.semester, and state.shareAsEnrollment are set.
+// Postcondition: The unit share bar chart is redrawn.
+function renderShareChart() {
+
+    const colors = getThemeColors();
+    const stats = state.data.unitStats[state.semester];
+
+    // The comparison base is either total enrollment, or every unit's students added together
+    let base = state.data.enrollment[state.semester];
+    if (!state.shareAsEnrollment) {
+        base = 0;
+        for (const unitId in stats) {
+            base = base + stats[unitId].studentsServed;
+        }
+    }
+
+    // Turns each unit's count into a percent of the base
+    const rows = [];
+    for (const unitId in stats) {
+        rows.push({
+            label: getUnitName(unitId),
+            percent: (stats[unitId].studentsServed / base) * 100
+        });
+    }
+
+    // Puts the largest percent first
+    rows.sort(sortByPercentDescending);
+
+    drawChart("share", elements.shareCanvas, {
+        type: "bar",
+        data: makeBarData(rows, colors),
+        options: makeBarOptions(colors)
+    });
+
+}
+
+// Name: renderTrendChart
+// Desc: Draws Retriever Essentials unique and repeat students for each month.
+// Precondition: state.data and state.semester are set.
+// Postcondition: The monthly line chart is redrawn.
+function renderTrendChart() {
+
+    const colors = getThemeColors();
+    const months = state.data.monthlyEssentials[state.semester];
+
+    // Splits the monthly records into three parallel lists
+    const monthNames = [];
+    const uniqueCounts = [];
+    const repeatCounts = [];
+    for (let i = 0; i < months.length; i++) {
+        monthNames.push(months[i].month);
+        uniqueCounts.push(months[i].unique);
+        repeatCounts.push(months[i].repeat);
+    }
+
+    drawChart("trend", elements.trendCanvas, {
+        type: "line",
+        data: {
+            labels: monthNames,
+            datasets: [
+                {
+                    label: "Unique students",
+                    data: uniqueCounts,
+                    borderColor: colors.lineA,
+                    backgroundColor: colors.lineA,
+                    tension: LINE_TENSION
+                },
+                {
+                    label: "Repeat students",
+                    data: repeatCounts,
+                    borderColor: colors.lineB,
+                    backgroundColor: colors.lineB,
+                    borderDash: REPEAT_LINE_DASH,
+                    tension: LINE_TENSION
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: colors.text } }
+            },
+            scales: {
+                x: { ticks: { color: colors.text }, grid: { color: colors.grid } },
+                y: { beginAtZero: true, ticks: { color: colors.text }, grid: { color: colors.grid } }
+            }
+        }
+    });
+
+}
+
+// Name: getOverallParticipationFraction
+// Desc: Works out the share of ALL enrolled students who participate (all units, or the chosen unit).
+// Precondition: state.data, state.semester, and state.participationUnit are set.
+// Postcondition: Returns a fraction (0.368 means 36.8%).
+function getOverallParticipationFraction() {
+
+    const enrollment = state.data.enrollment[state.semester];
+
+    // For all units, use the unique students reached; for one unit, use that unit's students served
+    let participants = state.data.reach[state.semester].unique;
+    if (state.participationUnit !== ALL_UNITS_KEY) {
+        participants = state.data.unitStats[state.semester][state.participationUnit].studentsServed;
+    }
+
+    const fraction = participants / enrollment;
+
+    return fraction;
+
+}
+
+// Name: renderParticipationNote
+// Desc: Writes the overall participation rate under the participation chart.
+// Precondition: state.data, state.semester, and state.participationUnit are set.
+// Postcondition: The note explains how to read each bar against the overall rate.
+function renderParticipationNote() {
+
+    const overallFraction = getOverallParticipationFraction();
+
+    elements.participationNote.textContent = "Overall rate: " + formatPercent(overallFraction) +
+        " of enrolled students. A population below this rate is participating less than average.";
+
+}
+
+// Name: getUnitStudentsServed
+// Desc: Looks up how many students a unit served in a semester.
+// Precondition: state.data is loaded.
+// Postcondition: Returns the count, or null if that unit has no data for that semester.
+function getUnitStudentsServed(unitId, semester) {
+
+    // A missing value becomes null so the chart shows a gap instead of failing
+    let count = null;
+
+    if (state.data.unitStats[semester] !== undefined && state.data.unitStats[semester][unitId] !== undefined) {
+        count = state.data.unitStats[semester][unitId].studentsServed;
+    }
+
+    return count;
+
+}
+
+// Name: renderUnitTrendChart
+// Desc: Draws one line per unit showing students served in every semester.
+// Precondition: state.data is loaded.
+// Postcondition: The unit trend line chart is redrawn.
+function renderUnitTrendChart() {
+
+    const colors = getThemeColors();
+    const semesters = state.data.semesters;
+
+    // Builds one line (dataset) for each unit
+    const datasets = [];
+    for (let i = 0; i < state.data.units.length; i++) {
+        const unit = state.data.units[i];
+
+        // Collects this unit's count for every semester
+        const counts = [];
+        for (let j = 0; j < semesters.length; j++) {
+            counts.push(getUnitStudentsServed(unit.id, semesters[j]));
+        }
+
+        // Each unit gets its own color and point shape (the % wraps around if there are more units than colors)
+        datasets.push({
+            label: unit.name,
+            data: counts,
+            borderColor: colors.series[i % colors.series.length],
+            backgroundColor: colors.series[i % colors.series.length],
+            pointStyle: POINT_STYLES[i % POINT_STYLES.length],
+            pointRadius: POINT_RADIUS,
+            tension: LINE_TENSION
+        });
+    }
+
+    drawChart("unitTrend", elements.unitTrendCanvas, {
+        type: "line",
+        data: {
+            labels: semesters,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: "bottom", labels: { color: colors.text, usePointStyle: true } }
+            },
+            scales: {
+                x: { ticks: { color: colors.text }, grid: { color: colors.grid } },
+                y: { beginAtZero: true, ticks: { color: colors.text }, grid: { color: colors.grid } }
+            }
+        }
+    });
+
+}
+
 // Name: renderAll
 // Desc: Redraws every part of the page for the current choices.
 // Precondition: state.data and state.semester are set.
-// Postcondition: KPIs and the unit table match the current state.
+// Postcondition: KPIs, table, and all three charts match the current state.
 function renderAll() {
 
     renderKpis();
     renderUnitTable();
+    renderParticipationChart();
+    renderShareChart();
+    renderTrendChart();
+    renderUnitTrendChart();
 
 }
 
