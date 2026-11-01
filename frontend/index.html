@@ -75,10 +75,54 @@
                     </div>
                 </section>
 
+                <!-- Participation by population (top-right in the mockup) -->
+                <section class="card">
+                    <h2>Participation by population</h2>
+                    <div class="card-controls">
+                        <label for="participation-unit">Show</label>
+                        <select id="participation-unit"></select>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="participation-chart" role="img" aria-label="Bar chart of the percent of each student population participating"></canvas>
+                    </div>
+                    <p class="note" id="participation-note"></p>
+                </section>
+
+                <!-- Retriever Essentials monthly trend -->
+                <section class="card">
+                    <h2>Retriever Essentials: unique vs. repeat students by month</h2>
+                    <div class="chart-box">
+                        <canvas id="trend-chart" role="img" aria-label="Line chart of unique and repeat Retriever Essentials students by month"></canvas>
+                    </div>
+                </section>
+
+                <!-- Share of each unit (bottom-right in the mockup) -->
+                <section class="card">
+                    <h2>Unit share</h2>
+                    <div class="card-controls">
+                        <input type="checkbox" id="share-toggle">
+                        <label for="share-toggle">Compare to total student population</label>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="share-chart" role="img" aria-label="Bar chart of each unit's share of students served"></canvas>
+                    </div>
+                    <p class="note">A student served by two units is counted in both.</p>
+                </section>
+
+                <!-- Students served by each unit across semesters (full width) -->
+                <section class="card card-wide">
+                    <h2>Students served by unit, across semesters</h2>
+                    <div class="chart-box tall">
+                        <canvas id="unit-trend-chart" role="img" aria-label="Line chart of students served by each unit in each semester"></canvas>
+                    </div>
+                    <p class="note">Shows every semester in the data. The semester dropdown does not change this chart.</p>
+                </section>
+
             </div>
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
