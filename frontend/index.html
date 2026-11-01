@@ -36,6 +36,46 @@
             <p class="banner">Sample data only. These numbers are invented and are not real student data.</p>
             <p id="error-message" class="error" role="alert" hidden></p>
 
+            <!-- Key numbers -->
+            <section class="kpi-row" aria-label="Key numbers">
+                <div class="card kpi">
+                    <h2>Unique students reached</h2>
+                    <p class="kpi-value" id="kpi-unique">-</p>
+                    <p class="kpi-sub" id="kpi-unique-sub"></p>
+                </div>
+                <div class="card kpi">
+                    <h2>Served by more than one unit</h2>
+                    <p class="kpi-value" id="kpi-multi">-</p>
+                    <p class="kpi-sub" id="kpi-multi-sub"></p>
+                </div>
+                <div class="card kpi">
+                    <h2>Largest unit by students served</h2>
+                    <p class="kpi-value" id="kpi-largest">-</p>
+                    <p class="kpi-sub" id="kpi-largest-sub"></p>
+                </div>
+            </section>
+
+            <div class="grid">
+
+                <!-- Table of units (top-left in the mockup) -->
+                <section class="card">
+                    <h2>Units at a glance</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col" class="num">Students served</th>
+                                    <th scope="col" class="num">% of enrollment</th>
+                                    <th scope="col" class="num">Change vs. prior semester</th>
+                                </tr>
+                            </thead>
+                            <tbody id="unit-table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
         </main>
     </div>
 

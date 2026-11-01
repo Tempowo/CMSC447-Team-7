@@ -20,6 +20,8 @@
     --accent: #fdb515;
     --accent-contrast: #111111;
     --focus: #005fcc;
+    --positive: #1e7b34;
+    --negative: #b3261e;
 }
 
 * {
@@ -171,4 +173,88 @@ select {
     border: 2px solid var(--negative);
     border-radius: 4px;
     color: var(--negative);
+}
+
+/* ---------- Cards, KPIs, grid ---------- */
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    min-width: 0;
+}
+
+.card h2 {
+    margin: 0 0 10px;
+    font-size: 1rem;
+}
+
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 20px 24px 0;
+}
+
+.kpi-value {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+.kpi-sub {
+    margin: 2px 0 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 16px;
+    padding: 16px 24px 24px;
+}
+
+/* ---------- Table ---------- */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+thead th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+}
+
+tbody th {
+    font-weight: 600;
+}
+
+.num {
+    text-align: right;
+}
+
+.positive {
+    color: var(--positive);
+    font-weight: 600;
+}
+
+.negative {
+    color: var(--negative);
+    font-weight: 600;
 }
