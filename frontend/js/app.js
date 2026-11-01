@@ -188,6 +188,104 @@ async function loadData() {
 
 }
 
+// ===== Rendering =====
+
+// Name: renderKpis
+// Desc: Fills in the three key-number cards for the selected semester.
+// Precondition: state.data and state.semester are set.
+// Postcondition: The three KPI cards show current numbers.
+function renderKpis() {
+
+    const reach = state.data.reach[state.semester];
+    const enrollment = state.data.enrollment[state.semester];
+    const stats = state.data.unitStats[state.semester];
+    const multiUnit = reach.two + reach.threePlus;
+
+    // Finds the unit with the most students served
+    let largestId = null;
+    for (const unitId in stats) {
+
+        if (largestId === null || stats[unitId].studentsServed > stats[largestId].studentsServed) {
+            largestId = unitId;
+        }
+
+    }
+
+    // Unique students reached
+    elements.kpiUnique.textContent = formatNumber(reach.unique);
+    elements.kpiUniqueSub.textContent = formatPercent(reach.unique / enrollment) + " of enrolled students";
+
+    // Students served by more than one unit
+    elements.kpiMulti.textContent = formatNumber(multiUnit);
+    elements.kpiMultiSub.textContent = formatPercent(multiUnit / reach.unique) + " of students reached";
+
+    // Largest unit
+    elements.kpiLargest.textContent = getUnitName(largestId);
+    elements.kpiLargestSub.textContent = formatNumber(stats[largestId].studentsServed) + " students served";
+
+}
+
+// Name: renderUnitTable
+// Desc: Builds one table row per unit for the selected semester.
+// Precondition: state.data and state.semester are set.
+// Postcondition: The table body lists every unit with its numbers.
+function renderUnitTable() {
+
+    const enrollment = state.data.enrollment[state.semester];
+    const previousSemester = getPreviousSemester();
+
+    // Removes the old rows
+    elements.unitTableBody.textContent = "";
+
+    // Builds one row for each unit
+    for (let i = 0; i < state.data.units.length; i++) {
+        const unit = state.data.units[i];
+        const served = state.data.unitStats[state.semester][unit.id].studentsServed;
+
+        // Works out the change versus the prior semester (if there is one)
+        let changeText = NO_CHANGE_TEXT;
+        let changeClass = "";
+        if (previousSemester !== null) {
+            const before = state.data.unitStats[previousSemester][unit.id].studentsServed;
+
+            // Skips the change when the earlier count is zero (cannot divide by zero)
+            if (before > 0) {
+                const change = (served - before) / before;
+                changeText = (change * 100).toFixed(PERCENT_DECIMALS) + "%";
+
+                if (change >= 0) {
+                    changeText = "+" + changeText;
+                    changeClass = "positive";
+                } else {
+                    changeClass = "negative";
+                }
+            }
+        }
+
+        // Creates the cells and adds the row to the table
+        const row = document.createElement("tr");
+        const nameCell = makeCell("th", unit.name, "");
+        nameCell.setAttribute("scope", "row");
+        row.appendChild(nameCell);
+        row.appendChild(makeCell("td", formatNumber(served), "num"));
+        row.appendChild(makeCell("td", formatPercent(served / enrollment), "num"));
+        row.appendChild(makeCell("td", changeText, "num " + changeClass));
+        elements.unitTableBody.appendChild(row);
+    }
+
+}
+
+// Name: renderAll
+// Desc: Redraws every part of the page for the current choices.
+// Precondition: state.data and state.semester are set.
+// Postcondition: KPIs and the unit table match the current state.
+function renderAll() {
+
+    renderKpis();
+    renderUnitTable();
+
+}
+
 // ===== Setup =====
 
 // Name: init
@@ -212,6 +310,7 @@ async function init() {
     // Starts on the most recent semester in the data
     state.semester = state.data.semesters[state.data.semesters.length - 1];
 
+    renderAll();
 
 }
 
