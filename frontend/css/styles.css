@@ -1,0 +1,174 @@
+/* ==========================================================
+   Dean of Students Impact Dashboard - styles
+   Two themes, switched by the data-theme attribute on <html>:
+     "umbc" = black and gold with light content
+     "rt"   = dark slate, modeled on the UMBC RT help-desk look
+   To add or tweak a theme, only edit the variables below.
+   ========================================================== */
+
+:root[data-theme="umbc"] {
+    --bg: #f3f3f3;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --border: #d9d9d9;
+    --sidebar-bg: #111111;
+    --sidebar-text: #f2f2f2;
+    --header-bg: #ffffff;
+    --header-text: #1a1a1a;
+    --header-line: #fdb515;
+    --accent: #fdb515;
+    --accent-contrast: #111111;
+    --focus: #005fcc;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.4;
+}
+
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    padding: 8px 12px;
+    z-index: 10;
+}
+
+.skip-link:focus {
+    left: 0;
+}
+
+/* ---------- Page layout: sidebar + main ---------- */
+
+.app {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.sidebar :focus-visible {
+    outline-color: var(--accent);
+}
+
+.brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 0 8px 14px;
+    border-bottom: 3px solid var(--accent);
+}
+
+.brand span {
+    display: block;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--accent);
+}
+
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.nav-link {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 4px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+}
+
+.nav-link.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.main {
+    min-width: 0;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: var(--header-bg);
+    color: var(--header-text);
+    border-bottom: 3px solid var(--header-line);
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+select {
+    font: inherit;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.banner {
+    margin: 0;
+    padding: 8px 24px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.error {
+    margin: 16px 24px 0;
+    padding: 12px;
+    border: 2px solid var(--negative);
+    border-radius: 4px;
+    color: var(--negative);
+}

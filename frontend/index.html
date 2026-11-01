@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="umbc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dean of Students Impact Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="app">
+
+        <!-- Sidebar navigation (matches the teammate's mockup layout) -->
+        <nav class="sidebar" aria-label="Main navigation">
+            <div class="brand">Dean of Students<span>Impact Dashboard</span></div>
+            <ul class="nav-list">
+                <li><a class="nav-link active" href="index.html" aria-current="page">Overview</a></li>
+                <li><a class="nav-link disabled" aria-disabled="true" title="Coming soon">Retriever Essentials</a></li>
+                <li><a class="nav-link disabled" aria-disabled="true" title="Coming soon">Engagement &amp; Belonging</a></li>
+                <li><a class="nav-link disabled" aria-disabled="true" title="Coming soon">Upload Data</a></li>
+            </ul>
+        </nav>
+
+        <main id="main" class="main">
+
+            <header class="page-header">
+                <h1>Overview</h1>
+                <div class="filters">
+                    <label for="semester-select">Semester</label>
+                    <select id="semester-select"></select>
+                </div>
+            </header>
+
+            <p class="banner">Sample data only. These numbers are invented and are not real student data.</p>
+            <p id="error-message" class="error" role="alert" hidden></p>
+
+        </main>
+    </div>
+
+</body>
+</html>
