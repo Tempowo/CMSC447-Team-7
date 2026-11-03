@@ -37,6 +37,8 @@ function cacheElements() {
     // Controls
     elements.errorMessage = document.getElementById("error-message");
     elements.semesterSelect = document.getElementById("semester-select");
+    elements.participationUnitSelect = document.getElementById("participation-unit");
+    elements.shareToggle = document.getElementById("share-toggle");
 
     // Key number cards
     elements.kpiUnique = document.getElementById("kpi-unique");
@@ -672,7 +674,69 @@ function renderAll() {
 
 }
 
+// ===== Event handlers =====
+
+// Name: handleSemesterChange
+// Desc: Runs when the semester dropdown changes.
+// Precondition: state.data is loaded.
+// Postcondition: The whole page is redrawn for the new semester.
+function handleSemesterChange() {
+
+    state.semester = elements.semesterSelect.value;
+    renderAll();
+
+}
+
+// Name: handleParticipationUnitChange
+// Desc: Runs when the participation chart's unit dropdown changes.
+// Precondition: state.data is loaded.
+// Postcondition: Only the participation chart is redrawn.
+function handleParticipationUnitChange() {
+
+    state.participationUnit = elements.participationUnitSelect.value;
+    renderParticipationChart();
+
+}
+
+// Name: handleShareToggleChange
+// Desc: Runs when the "compare to total student population" checkbox changes.
+// Precondition: state.data is loaded.
+// Postcondition: Only the unit share chart is redrawn.
+function handleShareToggleChange() {
+
+    state.shareAsEnrollment = elements.shareToggle.checked;
+    renderShareChart();
+
+}
+
 // ===== Setup =====
+
+// Name: setupControls
+// Desc: Fills the dropdowns and connects the controls to their handlers.
+// Precondition: state.data is loaded and state.semester is set.
+// Postcondition: Changing any control redraws the matching part of the page.
+function setupControls() {
+
+    // Builds the semester options
+    const semesterOptions = [];
+    for (let i = 0; i < state.data.semesters.length; i++) {
+        semesterOptions.push({ value: state.data.semesters[i], label: state.data.semesters[i] });
+    }
+    fillSelect(elements.semesterSelect, semesterOptions, state.semester);
+
+    // Builds the unit options (starting with "All units")
+    const unitOptions = [{ value: ALL_UNITS_KEY, label: "All units" }];
+    for (let i = 0; i < state.data.units.length; i++) {
+        unitOptions.push({ value: state.data.units[i].id, label: state.data.units[i].name });
+    }
+    fillSelect(elements.participationUnitSelect, unitOptions, state.participationUnit);
+
+    // Connects each control to its handler function
+    elements.semesterSelect.addEventListener("change", handleSemesterChange);
+    elements.participationUnitSelect.addEventListener("change", handleParticipationUnitChange);
+    elements.shareToggle.addEventListener("change", handleShareToggleChange);
+
+}
 
 // Name: init
 // Desc: Starts the page: applies the saved theme, loads data, and draws everything.
@@ -696,6 +760,7 @@ async function init() {
     // Starts on the most recent semester in the data
     state.semester = state.data.semesters[state.data.semesters.length - 1];
 
+    setupControls();
     renderAll();
 
 }
