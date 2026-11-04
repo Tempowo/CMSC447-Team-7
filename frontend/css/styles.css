@@ -36,6 +36,36 @@
     --chart-series-7: #7a7a7a;
 }
 
+:root[data-theme="rt"] {
+    --bg: #2e3539;
+    --surface: #2e3539;
+    --text: #ededed;
+    --text-muted: #a9b0b4;
+    --border: #515151;
+    --sidebar-bg: #201817;
+    --sidebar-text: #ededed;
+    --header-bg: #636466;
+    --header-text: #ffffff;
+    --header-line: #636466;
+    --accent: #f1b743;
+    --accent-contrast: #201817;
+    --focus: #f1b743;
+    --positive: #6fcf97;
+    --negative: #f28b82;
+    --chart-bar: #f1b743;
+    --chart-line-a: #f1b743;
+    --chart-line-b: #8fb8de;
+    --chart-text: #d6dadc;
+    --chart-grid: #444b50;
+    --chart-series-1: #f1b743;
+    --chart-series-2: #8fb8de;
+    --chart-series-3: #6fcf97;
+    --chart-series-4: #f28b82;
+    --chart-series-5: #d6a8e8;
+    --chart-series-6: #5ed1c4;
+    --chart-series-7: #e6e6e6;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -133,6 +163,16 @@ body {
 .nav-link.disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+.theme-toggle {
+    background: transparent;
+    color: var(--sidebar-text);
+    border: 1px solid var(--sidebar-text);
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    font: inherit;
 }
 
 .main {

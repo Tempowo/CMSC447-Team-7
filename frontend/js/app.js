@@ -5,6 +5,13 @@
 // ===== Constants =====
 
 const DATA_URL = "data/sample-data.json";
+const THEME_STORAGE_KEY = "dashboard-theme";
+const THEME_UMBC = "umbc";
+const THEME_RT = "rt";
+const THEMES = [
+    { id: THEME_UMBC, label: "UMBC" },
+    { id: THEME_RT, label: "RT Dark" }
+];
 const ALL_UNITS_KEY = "all";
 const PERCENT_DECIMALS = 1;
 const NO_CHANGE_TEXT = "-";
@@ -39,6 +46,7 @@ function cacheElements() {
     elements.semesterSelect = document.getElementById("semester-select");
     elements.participationUnitSelect = document.getElementById("participation-unit");
     elements.shareToggle = document.getElementById("share-toggle");
+    elements.themeToggle = document.getElementById("theme-toggle");
 
     // Key number cards
     elements.kpiUnique = document.getElementById("kpi-unique");
@@ -241,6 +249,46 @@ async function loadData() {
 
 // ===== Theme =====
 
+// Name: getThemeLabel
+// Desc: Finds the display label for a theme id.
+// Precondition: themeId is text.
+// Postcondition: Returns the label, or the id itself if the theme is unknown.
+function getThemeLabel(themeId) {
+
+    let label = themeId;
+    let foundTheme = false;
+
+    // Looks through THEMES until a match is found
+    for (let i = 0; i < THEMES.length && !foundTheme; i++) {
+
+        if (THEMES[i].id === themeId) {
+            label = THEMES[i].label;
+            foundTheme = true;
+        }
+
+    }
+
+    return label;
+
+}
+
+// Name: getSavedTheme
+// Desc: Reads the theme the user picked last time.
+// Precondition: None.
+// Postcondition: Returns the saved theme id, or the default theme if none is saved.
+function getSavedTheme() {
+
+    let themeId = localStorage.getItem(THEME_STORAGE_KEY);
+
+    // Nothing saved yet, so use the default
+    if (themeId === null) {
+        themeId = THEME_UMBC;
+    }
+
+    return themeId;
+
+}
+
 // Name: getThemeColors
 // Desc: Reads the current theme's chart colors from the CSS variables.
 // Precondition: A theme is set on the <html> element.
@@ -265,6 +313,21 @@ function getThemeColors() {
     };
 
     return colors;
+
+}
+
+// Name: applyTheme
+// Desc: Switches the page to a theme and remembers the choice in the browser.
+// Precondition: themeId matches an id in THEMES.
+// Postcondition: The theme is applied; the toggle button label is updated.
+function applyTheme(themeId) {
+
+    // Sets the theme on the page and saves it
+    document.documentElement.setAttribute("data-theme", themeId);
+    localStorage.setItem(THEME_STORAGE_KEY, themeId);
+
+    // Updates the button text to show the theme name
+    elements.themeToggle.textContent = "Theme: " + getThemeLabel(themeId);
 
 }
 
@@ -709,6 +772,29 @@ function handleShareToggleChange() {
 
 }
 
+// Name: handleThemeToggleClick
+// Desc: Runs when the theme button is clicked; switches to the other theme.
+// Precondition: elements has been filled by cacheElements.
+// Postcondition: The other theme is applied; charts are redrawn if data is loaded.
+function handleThemeToggleClick() {
+
+    const current = document.documentElement.getAttribute("data-theme");
+
+    // Picks the theme that is not showing right now
+    let next = THEME_UMBC;
+    if (current === THEME_UMBC) {
+        next = THEME_RT;
+    }
+
+    applyTheme(next);
+
+    // Charts read their colors when drawn, so they need to be redrawn
+    if (state.data !== null) {
+        renderAll();
+    }
+
+}
+
 // ===== Setup =====
 
 // Name: setupControls
@@ -746,6 +832,10 @@ async function init() {
 
     // Saves references to the page elements
     cacheElements();
+
+    // Applies the saved theme and connects the theme button (it works even if the data fails to load)
+    applyTheme(getSavedTheme());
+    elements.themeToggle.addEventListener("click", handleThemeToggleClick);
 
     // Loads the data; shows an error and stops if it fails
     try {
