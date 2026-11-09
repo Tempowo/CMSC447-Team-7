@@ -330,3 +330,28 @@ tbody th {
     color: var(--negative);
     font-weight: 600;
 }
+
+/* ---------- Small screens: stack everything ---------- */
+
+@media (max-width: 900px) {
+
+    .app {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .nav-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .kpi-row,
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
