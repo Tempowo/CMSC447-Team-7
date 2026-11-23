@@ -62,54 +62,103 @@ add_student = ("INSERT INTO students "
 
 # query functions for backend tables
 
-# Get all surveys by date range
-get_form_by_date = ("SELECT unit_id, upload_date, num_responses FROM form_info "
-                 "WHERE upload_date BETWEEN %s AND %s")
-
 # Get all aggregates by date range
 get_aggregate_by_date = ("SELECT unit_id, num_served, date, new_students "
                          "WHERE date BETWEEN %s AND %s")
+
+# Get all form_info by date range
+get_form_by_date = ("SELECT form_id, unit_id, upload_date, num_responses FROM form_info "
+                 "WHERE upload_date BETWEEN %s AND %s")
+
+# Get all sample data under a specific form id, excludes population
+get_sample_by_form = ("SELECT is_grad, unit_served FROM sample_survey "
+                      "WHERE form_id = %s")
+
+# Get all sample data under a specific form id and population
+get_sample_by_form_pop = ("SELECT is_grad, unit_served FROM sample_survey "
+                      "WHERE form_id = %s AND population = %s")
 
 OUTPUT_PATH = "data/SQL-data.json"
 
 # Placeholder enrollment per semester (NOT official figures)
 SEMESTERS = [
-    {"name": "Fall 2025", "enrollment": 14100},
-    {"name": "Spring 2026", "enrollment": 13900},
-    {"name": "Fall 2026", "enrollment": 14200},
+    {"name": "Fall", "year": 2025, "enrollment": 14100},
+    {"name": "Spring", "year": 2026, "enrollment": 13900},
+    {"name": "Fall", "year": 2026, "enrollment": 14200},
 ]
 
-# Query table for list of units
-UNITS = []
+# Undergraduate and graduate students make up all of enrollment, so these add up to 1 (NOT official figures)
+UNDERGRADUATE_FRACTION = 0.78
+GRADUATE_FRACTION = 0.22
 
-# Query all data_points for the selected populations (the specific ids will be added as a "picker")
-POPULATIONS = []
+POPULATIONS = [
+    {"name": "Undergraduate", "fraction": UNDERGRADUATE_FRACTION},
+    {"name": "Graduate", "fraction": GRADUATE_FRACTION},
+    {"name": "Transfer", "fraction": 0.17},
+    {"name": "First-generation", "fraction": 0.24},
+    {"name": "Veteran", "fraction": 0.02},
+    {"name": "International", "fraction": 0.08},
+]
 
 # Name: build_semester
 # Desc: Builds every table the dashboard needs for one semester.
 # Precondition: semester_name is like "Fall 2025"; enrollment is a positive whole number.
 # Postcondition: Returns a dictionary of reach, unit, participation, and monthly data.
-def build_semester(semester, year):
+def build_semester(semester, year, enrollment):
+    units_served = {}
+    monthly = []
+
     if semester == "Fall":
         start_date = datetime.date(year, 8, 1)
-        end_date = datetime.month(year, 12, 31)
+        end_date = datetime.date(year, 12, 31)
     else:
-        start_date = datetime.month(year, 1, 1)
-        end_date = datetime.month(year, 5, 31)
+        start_date = datetime.date(year, 1, 1)
+        end_date = datetime.date(year, 5, 31)
 
+    cursor = cnx.cursor()
     cursor.execute(get_aggregate_by_date, (start_date, end_date))
 
-    unit_served = {}
-    monthly = []
-    total_served = 0
-    total_new = 0
     for (unit_id, num_served, date, new_students) in cursor:
-        unit_served[unit_id] = num_served
+        units_served[unit_id] = num_served
         monthly.append({"month": date.strftime("%b"), "unique": new_students, "repeat": round(num_served - new_students)})
+
+    cursor.close()
+
+    cursor = cnx.cursor()
+    cursor.execute(get_form_by_date, (start_date, end_date))
+
+    participation = []
+    # for every population category
+    for pop in POPULATIONS:
+        enrolled = round(enrollment * pop["fraction"])
+        participants = {}
+
+        # for every submitted form in the date range
+        for (form_id) in cursor:
+            formCursor = cnx.cursor()
+
+            if (pop["name"] == "Graduate"):
+                formCursor.execute(get_sample_by_form, form_id)
+                for (is_grad, unit_served) in formCursor:
+                    if (is_grad == 1):
+                        participants[unit_served] += 1
+            else:
+                formCursor.execute(get_sample_by_form, form_id)
+                if (pop["name"] == "Undergraduate"):
+                    if (is_grad == 0):
+                        participants[unit_served] += 1
+                else:
+                    formCursor.execute(get_sample_by_form_pop, form_id, pop)
+                    # for every date point from the given form with the given population
+                    for (is_grad, unit_served) in formCursor:
+                        participants[unit_served] += 1
+
+            participation.append({"population": pop["name"], "enrolled": enrolled, "participants": participants})   
+            formCursor.close()
 
     semester_data = {
         "reach": {"unique": unique, "one": one, "two": two, "threePlus": three_plus},
-        "unitServed": unit_served,
+        "unitServed": units_served,
         "participation": participation,
         "monthlyEssentials": monthly,
     }
@@ -197,7 +246,5 @@ if __name__ == "__main__":
         else:
             print(err)
     else:
-        cursor = cnx.cursor()
-
         main()
         cnx.close()
