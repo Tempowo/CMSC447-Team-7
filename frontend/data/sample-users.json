@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "isSample": true,
+    "note": "Invented sample accounts. Not real people."
+  },
+  "users": [
+    {
+      "username": "amorgan",
+      "firstName": "Alex",
+      "lastName": "Morgan",
+      "role": "Administrator",
+      "unitId": null,
+      "isActive": true,
+      "unitName": null
+    },
+    {
+      "username": "jrivera",
+      "firstName": "Jordan",
+      "lastName": "Rivera",
+      "role": "Unit Staff",
+      "unitId": "retriever-essentials",
+      "isActive": true,
+      "unitName": "Retriever Essentials"
+    },
+    {
+      "username": "kpatel",
+      "firstName": "Kiran",
+      "lastName": "Patel",
+      "role": "Unit Staff",
+      "unitId": "retriever-essentials",
+      "isActive": true,
+      "unitName": "Retriever Essentials"
+    },
+    {
+      "username": "dokafor",
+      "firstName": "Daniel",
+      "lastName": "Okafor",
+      "role": "Unit Staff",
+      "unitId": "mosaic",
+      "isActive": true,
+      "unitName": "Mosaic"
+    },
+    {
+      "username": "lchen",
+      "firstName": "Lena",
+      "lastName": "Chen",
+      "role": "Unit Staff",
+      "unitId": "pride-center",
+      "isActive": false,
+      "unitName": "Pride Center"
+    }
+  ]
+}

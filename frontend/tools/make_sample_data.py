@@ -3,7 +3,7 @@
 #       Every number is invented (placeholders until stakeholders send real data).
 #       Only aggregated counts are produced - no student-level records.
 # Precondition: Run from the frontend/ folder with Python 3 (no extra packages).
-# Postcondition: Writes data/sample-data.json and prints a short consistency check.
+# Postcondition: Writes data/sample-data.json and data/sample-users.json and prints a short consistency check.
 #                The unit pages (unitPages) and Engagement & Belonging (engagement) data use a
 #                second random generator, so the original Overview numbers never change.
 
@@ -17,6 +17,20 @@ UNIT_PAGE_SEED = 448
 unit_rng = random.Random(UNIT_PAGE_SEED)
 
 OUTPUT_PATH = "data/sample-data.json"
+USERS_OUTPUT_PATH = "data/sample-users.json"
+
+ROLE_ADMIN = "Administrator"
+ROLE_STAFF = "Unit Staff"
+
+# Invented sample accounts for the mock sign-in (not real people). Administrators have no unit.
+# One account is inactive so the "account not active" message can be shown.
+USERS = [
+    {"username": "amorgan", "firstName": "Alex", "lastName": "Morgan", "role": ROLE_ADMIN, "unitId": None, "isActive": True},
+    {"username": "jrivera", "firstName": "Jordan", "lastName": "Rivera", "role": ROLE_STAFF, "unitId": "retriever-essentials", "isActive": True},
+    {"username": "kpatel", "firstName": "Kiran", "lastName": "Patel", "role": ROLE_STAFF, "unitId": "retriever-essentials", "isActive": True},
+    {"username": "dokafor", "firstName": "Daniel", "lastName": "Okafor", "role": ROLE_STAFF, "unitId": "mosaic", "isActive": True},
+    {"username": "lchen", "firstName": "Lena", "lastName": "Chen", "role": ROLE_STAFF, "unitId": "pride-center", "isActive": False},
+]
 
 # Placeholder enrollment per semester (NOT official figures)
 SEMESTERS = [
@@ -464,6 +478,32 @@ def check_unit_page(unit_id, page, unit_total, built):
         assert source_sum >= all_data["uniqueByRange"][key]
 
 
+# Name: build_users_file
+# Desc: Builds the sample accounts for the mock sign-in, adding each unit's name for display.
+# Precondition: Every unitId in USERS is an id in UNITS (or None for Administrators).
+# Postcondition: Returns a dictionary ready to be written as JSON.
+def build_users_file():
+
+    # Looks up each unit's name by its id
+    unit_names = {}
+    for unit in UNITS:
+        unit_names[unit["id"]] = unit["name"]
+
+    users = []
+    for user in USERS:
+        user_entry = dict(user)
+
+        # Administrators have no unit, so their unit name stays empty
+        user_entry["unitName"] = None
+        if user["unitId"] is not None:
+            user_entry["unitName"] = unit_names[user["unitId"]]
+
+        users.append(user_entry)
+
+    users_file = {"meta": {"isSample": True, "note": "Invented sample accounts. Not real people."}, "users": users}
+    return users_file
+
+
 # Name: main
 # Desc: Builds all semesters, checks basic consistency, and writes the JSON file.
 # Precondition: The data/ folder exists inside the folder you run this from.
@@ -546,6 +586,11 @@ def main():
     with open(OUTPUT_PATH, "w") as out_file:
         json.dump(result, out_file, indent=2)
     print("Wrote", OUTPUT_PATH)
+
+    # Writes the sample accounts used by the mock sign-in
+    with open(USERS_OUTPUT_PATH, "w") as users_file:
+        json.dump(build_users_file(), users_file, indent=2)
+    print("Wrote", USERS_OUTPUT_PATH)
 
 
 if __name__ == "__main__":
