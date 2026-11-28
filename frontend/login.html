@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="umbc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in - Dean of Students Impact Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login-page">
+
+    <main id="main" class="login-wrap">
+        <section class="login-card">
+
+            <h1 class="login-brand">Dean of Students<span>Impact Dashboard</span></h1>
+
+            <p id="timeout-note" class="login-note" hidden>You were signed out after 30 minutes of inactivity.</p>
+
+            <h2>Sign in with your UMBC account</h2>
+
+            <form id="login-form" novalidate>
+
+                <div class="field">
+                    <label for="username">UMBC username</label>
+                    <input id="username" type="text" autocomplete="username" aria-describedby="username-error">
+                    <p id="username-error" class="field-error" hidden></p>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" autocomplete="current-password" aria-describedby="password-error">
+                    <p id="password-error" class="field-error" hidden></p>
+                </div>
+
+                <p id="form-error" class="form-error" role="alert" hidden></p>
+
+                <button id="sign-in" class="button-primary" type="submit" disabled>Sign in</button>
+
+            </form>
+
+            <p class="login-small">Access is limited to authorized Dean of Students staff. Your password is checked by UMBC and is never stored by the dashboard.</p>
+            <p class="login-small">Sample build: sign in as amorgan (Administrator), jrivera (Unit Staff), or lchen (inactive account) with any password.</p>
+
+        </section>
+    </main>
+
+    <script src="js/shell.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

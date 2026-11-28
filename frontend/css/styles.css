@@ -19,6 +19,7 @@
     --header-line: #fdb515;
     --accent: #fdb515;
     --accent-contrast: #111111;
+    --accent-text: #9a6f00;
     --focus: #005fcc;
     --positive: #1e7b34;
     --negative: #b3261e;
@@ -49,6 +50,7 @@
     --header-line: #636466;
     --accent: #f1b743;
     --accent-contrast: #201817;
+    --accent-text: #f1b743;
     --focus: #f1b743;
     --positive: #6fcf97;
     --negative: #f28b82;
@@ -226,6 +228,115 @@ select {
     border: 2px solid var(--negative);
     border-radius: 4px;
     color: var(--negative);
+}
+
+/* ---------- Login page and form controls ---------- */
+
+.login-page {
+    background: var(--sidebar-bg);
+}
+
+.login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    color: var(--text);
+    border-top: 6px solid var(--accent);
+    border-radius: 3px;
+    padding: 34px 36px;
+}
+
+.login-brand {
+    margin: 0 0 20px;
+    font-size: 1.3rem;
+}
+
+.login-brand span {
+    display: block;
+    font-weight: 400;
+    color: var(--accent-text);
+}
+
+.login-card h2 {
+    margin: 0 0 14px;
+    font-size: 1rem;
+}
+
+.login-note {
+    margin: 0 0 16px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.login-small {
+    margin: 16px 0 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.field {
+    margin-bottom: 14px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.field input {
+    width: 100%;
+    font: inherit;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.field input.invalid {
+    border-color: var(--negative);
+    border-width: 2px;
+}
+
+.field-error,
+.form-error {
+    margin: 4px 0 0;
+    color: var(--negative);
+    font-size: 0.85rem;
+}
+
+.form-error {
+    margin: 0 0 10px;
+}
+
+.button-primary {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border: 0;
+    border-radius: 3px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.button-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* ---------- Cards, KPIs, grid ---------- */
